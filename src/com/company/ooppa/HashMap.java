@@ -18,6 +18,7 @@ class HashMap<K, V> {
     }
 
 
+    private int numOfElements = 0;
     private int bucketSize = 16;
 
     private LinkedList<KeyValue>[] elements = new LinkedList[bucketSize];
@@ -30,6 +31,7 @@ class HashMap<K, V> {
         LinkedList<KeyValue> list = elements[position];
         keyExistenceTester(key, list);
         list.add(new KeyValue(key, value));
+        numOfElements++;
         System.out.println(value.toString() +" added!");
         resizeIfNeeded();
     }
@@ -60,26 +62,15 @@ class HashMap<K, V> {
     }
 
     private void resizeIfNeeded() {
-        if (this.size() > bucketSize * 2 || this.size() < bucketSize / 2) {
+        if (numOfElements > bucketSize * 2 || numOfElements < bucketSize / 2) {
             LinkedList<KeyValue> all = kVCollector(elements);
-            bucketSize = all.size() > bucketSize * 2 ? bucketSize * 2 : bucketSize / 2;
+            bucketSize = numOfElements > bucketSize * 2 ? bucketSize * 2 : bucketSize / 2;
             elements = new LinkedList[bucketSize];
             for (KeyValue kv : all) {
                 this.add(kv.key, kv.value);
             }
         }
         System.out.println("Resized!");
-    }
-
-
-    private int size(){
-        int returnNumber = 0;
-        for (LinkedList<KeyValue> kv : elements) {
-            if (kv != null) {
-                returnNumber += kv.size();
-            }
-        }
-        return returnNumber;
     }
 
     private LinkedList<KeyValue> kVCollector(LinkedList<KeyValue>[] elements) {
