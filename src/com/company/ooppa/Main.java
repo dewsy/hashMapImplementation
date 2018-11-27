@@ -3,12 +3,12 @@ package com.company.ooppa;
 public class Main {
 
     public static void main(String[] args) {
-    HashMap<Integer, String> myHashMap = new HashMap<>();
-    myHashMap.add(2,"alma");
-    myHashMap.add(18,"korte");
-    System.out.println(myHashMap.getValue(2));
-    System.out.println(myHashMap.getValue(18));
-    myHashMap.add(5, "buborek");
-    System.out.println(myHashMap.getValue(5));
+    HashMap<String, String> myHashMap = new HashMap<>();
+    myHashMap.add("fruit","Apple");
+    myHashMap.add("otherFruit","Pear");
+    System.out.println(myHashMap.getValue("fruit"));
+    System.out.println(myHashMap.getValue("otherFruit"));
+    myHashMap.add("other", "bubble");
+    System.out.println(myHashMap.getValue("other"));
     }
 }

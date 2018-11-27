@@ -5,13 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-class HashMap<Integer, V> {
+class HashMap<K, V> {
 
     class KeyValue {
-        public Integer key;
+        public K key;
         public V value;
 
-        public KeyValue(Integer key, V value) {
+        public KeyValue(K key, V value) {
             this.key = key;
             this.value = value;
         }
@@ -22,19 +22,19 @@ class HashMap<Integer, V> {
 
     private LinkedList<KeyValue>[] elements = new LinkedList[bucketSize];
 
-    public void add(Integer key, V value) {
+    public void add(K key, V value) {
         int position = getHash(key);
         if (elements[position] == null) {
             elements[position] = new LinkedList<>();
         }
-        LinkedList list = elements[position];
+        LinkedList<KeyValue> list = elements[position];
         keyExistenceTester(key, list);
         list.add(new KeyValue(key, value));
         System.out.println(value.toString() +" added!");
         resizeIfNeeded();
     }
 
-    private void keyExistenceTester(Integer key, LinkedList<KeyValue> elements) {
+    private void keyExistenceTester(K key, LinkedList<KeyValue> elements) {
         for (KeyValue keyValue : elements) {
             if (keyValue.key == key) {
                 throw new KeyAlreadyExistsException();
@@ -42,9 +42,9 @@ class HashMap<Integer, V> {
         }
     }
 
-    public V getValue(Integer key) {
+    public V getValue(K key) {
         int position = getHash(key);
-        LinkedList list = elements[position];
+        LinkedList<KeyValue> list = elements[position];
         Iterator<KeyValue> iterator = list.iterator();
         while (iterator.hasNext()) {
             KeyValue current = iterator.next();
@@ -55,9 +55,8 @@ class HashMap<Integer, V> {
         throw new NoSuchElementException();
     }
 
-    private int getHash(Integer key) {
-        int keyButPrimitive = java.lang.Integer.parseInt(key.toString()); //Java Y U DO THIS?!?!
-        return keyButPrimitive % bucketSize;
+    private int getHash(K key) {
+        return key.hashCode() % bucketSize;
     }
 
     private void resizeIfNeeded() {
@@ -87,9 +86,7 @@ class HashMap<Integer, V> {
         LinkedList<KeyValue> allElements = new LinkedList<>();
         for (LinkedList<KeyValue> list : elements) {
             if (list != null) {
-                for (KeyValue kv : list) {
-                    allElements.add(kv);
-                }
+                allElements.addAll(list);
             }
         }
         return allElements;
